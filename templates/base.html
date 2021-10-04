@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>base</title>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}" type="text/css"/>
+    {% block styles %}
+
+    {% endblock %}
+</head>
+
+
+<body>
+
+<div id = "wrapper">
+    <!-- side bar -->
+    {% include 'navbar.html' %}
+
+    <!-- page content -->
+    <h1>TEST base should show up on all pages except nav bar</h1>
+
+    {% block main %}
+
+    {% endblock %}
+
+</div>
+</body>
+</html>
