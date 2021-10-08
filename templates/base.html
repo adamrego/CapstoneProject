@@ -4,7 +4,7 @@
     <title>base</title>
     <meta charset="UTF-8">
     {% load static %}
-    <link href="{% static 'css/bootstrap.min.css' %}" >
+    <link href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'bootstrap.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}" type="text/css"/>
@@ -16,17 +16,21 @@
 
 <body>
 
-<div id = "wrapper">
-    <!-- side bar -->
-    {% include 'navbar.html' %}
+<div class="wrapper">
 
-    <!-- page content -->
-    <h1>TEST base should show up on all pages except nav bar</h1>
-     <button type="submit" class="btn btn-primary">Submit</button>
-    {% block main %}
 
-    {% endblock %}
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        {% include 'navbar.html' %}
+    </nav>
 
+    <!-- Page Content -->
+    <div id="content">
+        < <! --- display main middle -->
+        {% block middle_section %}
+
+        {% endblock %}
+    </div>
 </div>
 </body>
 </html>

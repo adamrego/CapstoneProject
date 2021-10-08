@@ -1,3 +1,7 @@
-h3{
-    color: blue;
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+    background: #6a1a21;
+    position: fixed;
 }
