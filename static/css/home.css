@@ -27,3 +27,7 @@ h3{
     float: right;
     padding-top: 10px;
 }
+
+.sticky{
+    background: none;
+}
