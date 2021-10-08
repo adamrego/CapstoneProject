@@ -2,11 +2,17 @@
     margin-top: 150px;
     text-align: center;
 }
+h1
+{
+    color: #0c7b93;
+    display: inline;
+}
+
 h3{
     color: #043b5d;
     display: inline;
 }
-.content ul{
+.content ul {
     display: inline-block;
     text-align: left;
     list-style: none;

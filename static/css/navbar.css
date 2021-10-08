@@ -1,8 +1,10 @@
 #sidebar-wrapper {
     position: fixed;
-    width: 110px;
+    width: 100px;
     height: 100%;
-    background: #000;
+    top: 0;
+    left: 0;
+    background: #142850;
 
 }
 
@@ -13,7 +15,7 @@
 
 .sidebar-nav li {
     text-indents: 60px;
-    line-height: 80px;
+    line-height: 22px;
     text-decoration: none;
     font-size: 22px;
     font-family: Calibri;
@@ -24,6 +26,7 @@
     text-decoration: none;
     text-align: center;
     color: #ddd;
+    padding: 10px
 }
 
 p {
@@ -37,5 +40,6 @@ p {
     bottom: 25px;
     color: #ddd;
     font-size: 20px;
+    font-family: Calibri;
     padding-left: 4px;
 }
