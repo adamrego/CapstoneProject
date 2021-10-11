@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+{% block header %}
+    <h1>About</h1>
+    <form class="form-group-row" method="post">
+        {% csrf_token %}
+    </form>
+{% endblock %}
+
+
+{% block middle_section %}
+    <div class="center">
+        <div class="content">
+            <ul>
+            <h1>About page</h1>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
