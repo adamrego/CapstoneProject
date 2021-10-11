@@ -11,3 +11,8 @@ class Home(View):
 def redirect_about(request):
     response = redirect('/about/')
     return render(request, "about.html")
+
+
+def redirect_lanes(request):
+    response = redirect('/lanes/')
+    return render(request, "lanes.html")
