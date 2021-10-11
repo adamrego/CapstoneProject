@@ -22,5 +22,6 @@ from CapstoneProject.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Home.as_view())
+    path('', Home.as_view()),
+    path('About/', redirect_about)
 ]

@@ -7,3 +7,7 @@ class Home(View):
     def get(self, request):
         return render(request, "home.html", {})
 
+
+def redirect_about(request):
+    response = redirect('/about/')
+    return render(request, "about.html")
