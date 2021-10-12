@@ -16,3 +16,7 @@ def redirect_about(request):
 def redirect_lanes(request):
     response = redirect('/lanes/')
     return render(request, "lanes.html")
+
+def redirect_pools(request):
+    response = redirect('/pools/')
+    return render(request, "pools.html")

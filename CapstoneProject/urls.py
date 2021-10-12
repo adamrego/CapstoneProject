@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Home.as_view()),
     path('About/', redirect_about),
-    path('Lanes/', redirect_lanes)
+    path('Lanes/', redirect_lanes),
+    path('Pools/', redirect_pools),
 ]
