@@ -8,6 +8,11 @@ class Home(View):
         return render(request, "home.html", {})
 
 
+def redirect_home(request):
+    response = redirect('/Home/')
+    return render(request, "home.html")
+
+
 def redirect_about(request):
     response = redirect('/about/')
     return render(request, "about.html")

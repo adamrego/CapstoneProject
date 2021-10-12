@@ -24,4 +24,5 @@ urlpatterns = [
     path('About/', redirect_about),
     path('Lanes/', redirect_lanes),
     path('Pools/', redirect_pools),
+    path('Home/', redirect_home),
 ]
