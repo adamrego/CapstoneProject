@@ -1,13 +1,15 @@
 #page-content-wrapper {
     width: 100%;
     padding-top: 10px;
-    margin-left: 150px;
+    margin-left: 100px;
     overflow: hidden;
 }
 .sticky {
     background-color: white;
     top: 0;
 }
+
+
 h1{
     display: inline-block;
     color: dimgrey;
