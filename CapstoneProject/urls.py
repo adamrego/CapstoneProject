@@ -27,5 +27,6 @@ urlpatterns = [
     path('Lanes/', redirect_lanes),
     path('Pools/', redirect_pools),
     path('Home/', redirect_home),
+    path("register/", register_request, name="register")
 
 ]
