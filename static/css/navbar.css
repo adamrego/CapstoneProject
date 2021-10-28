@@ -32,7 +32,7 @@
 }
 
 p {
-    line-height: 2px;
+    line-height:normal;
 }
 
 .sidebar-nav logOut a {

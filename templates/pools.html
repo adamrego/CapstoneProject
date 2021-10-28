@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/pools.css' %}">
+            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css'>
+            <!-- jQuery -->
+            <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js'></script>
+            <!-- Popper JS -->
+            <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
+            <!-- Bootstrap JS -->
+            <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
+            <link rel="stylesheet" type="text/css" href="{% static 'css/pools.css' %}?version=2">
 {% endblock %}
 
 {% block header %}
@@ -16,40 +23,83 @@
     <div class="center">
         <div class="content">
             <ul>
-            <div class="row">
-                <div class="column">
-                     {% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />
-                </div>
-                <div class="column">
-                    {% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />
-                </div>
-                <div class="column">
-                    {% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />
-                </div>
-                <div class="column">
-                  {% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />
-                </div>
-                <div class="column">
-                {% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />
-                </div>
-                <div class="column">
-                {% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />
-                </div>
-                <div class="column">
-                    <div class="container">
-                        {% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />
-                            <a href="">
-                            <div class="middle">
-                                <div class="text">Reserve Lane</div>
-                            </div>
-                            </a>
-                    </div>
-                </div>
-                <div class="column">
-                    {% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" height="500 "width="125" class="image" />
-                </div>
-            </div>
+                <div id="poolStart"></div>
             </ul>
         </div>
     </div>
+<!--Reserve Pop up Modal -->
+
+     <div class="modal fade" id="reserveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-title text-center">
+                            <h4>Reserve A Lane</h4>
+                        </div>
+                        <div class="d-flex flex-column text-center">
+                            <form>
+                                <div class="form-group">
+                                    <input type="text" id="textInput" value="">
+                                <label for="fullName"></label><input type="range" min="15" max="60" step="15" name="rangeInput" class="form-control" id="fullName"
+                                                                       placeholder="Your Full Name..." onchange="updateTextInput(this.value);">
+                                </div>
+                                {% csrf_token %}
+                                <button class="btn btn-primary" type="submit">Reserve</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<script>
+document.onload = pageStart();
+function pageStart(){
+    console.log("PageStart");
+    createPool(8,[false,false,false,true,true,true,false,true]);
+}
+function updateTextInput(val) {
+          document.getElementById('textInput').value=val;
+        }
+function createPool(numLanes, taken){
+    //takes in int of lanes and an array of bool that shows if the lane is taken or not
+    const pool = document.getElementById("poolStart");
+    for(let i = 0; i < numLanes; i++){
+        if(taken[i] == false) {
+            //console.log("Open")
+            pool.insertAdjacentHTML('beforeend',
+                '<div class="column">' +
+                    '<div class= "container">' +
+                        '{% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500" width="125" class="image" />' +
+                        '<a href data-toggle="modal" data-target="#reserveModal">' +
+                            '<div class="middle\">' +
+                                '<div class="text">Reserve Lane</div>' +
+                           ' </div>' +
+                            '</a>' +
+                    '</div>' +
+                '</div>');
+        }
+        else {
+            console.log("Taken")
+            pool.insertAdjacentHTML('beforeend',
+                            '<div class="column">' +
+                    '<div class="container">' +
+                            '{% load static %} <img src="{% static "Media/takenLane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />' +
+                            '<div class="middle">'+
+                               ' <div class="textReserved">Lane Taken</div>'+
+                           ' </div>'+
+                    '</div>' +
+                '</div>');
+        }
+
+    }
+}
+</script>
 {% endblock %}
