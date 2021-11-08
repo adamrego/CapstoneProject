@@ -22,13 +22,26 @@
 {% block middle_section %}
     <div class="center">
         <div class="content">
-            <ul>
-                <div id="poolStart"></div>
+            <table><tr>
+                <ul>
+                    <label>Pick a Date and Time: </label>
+                    <input id="calender" class="dateSelector" type="date" onchange="updateDate(this.value)">
+                    <select class="dateSelector" name="cars" id="time">
+                        <option value="">Undefined</option>
+                        <option value="1:00 pm" onclick="updateTime(value)">1:00 pm</option>
+                        <option value="2:00 pm" onclick="updateTime(value)">2:00 pm</option>
+                        <option value="3:00 pm" onclick="updateTime(value)">3:00 pm</option>
+                        <option value="4:00 pm" onclick="updateTime(value)">4:00 pm</option>
+                    </select>
+                </ul>
+                </tr>
+                </table>
+                <div class="center" id="poolStart"></div>
             </ul>
         </div>
     </div>
-<!--Reserve Pop up Modal -->
 
+<!--Reserve Pop up Modal -->
      <div class="modal fade" id="reserveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -67,7 +80,21 @@ function pageStart(){
 }
 function updateTextInput(val) {
           document.getElementById('textInput').value=val;
-        }
+}
+function updateTime(val){
+    //should refresh pool
+    console.log("updateTime: " + val);
+}
+function updateDate(val){
+    const time = document.getElementById('time');
+    //should refresh time selector
+    console.log("updateDate: " + val);
+
+    //clear time options
+    time.options.length = 0;
+    //need to create loop but this adds a selection of 7:00pm to the selector
+    time.insertAdjacentHTML('beforeend', '<option value="7:00 pm" onclick="updateTime(value)">7:00 pm</option>')
+}
 function createPool(numLanes, taken){
     //takes in int of lanes and an array of bool that shows if the lane is taken or not
     const pool = document.getElementById("poolStart");
