@@ -47,21 +47,26 @@
                 </svg>
                 <p>About</p></a></li>
             <li>
-                {% if request.user.is_athenticated %}
-                    {% else %}
-                        <div class="container">
-                            <a href data-toggle="modal" data-target="#loginModal">
-                                Login
-                            </a>
-                        </div>
-                        </li>
-                        <li>
-                        <div class="container">
-                            <a href data-toggle="modal" data-target="#signupModal">
-                                Sign Up
-                            </a>
-                        </div>
+                {% if not user.is_athenticated %}
 
+                    <div class="container">
+                        <a href data-toggle="modal" data-target="#loginModal">
+                            Login
+                        </a>
+                    </div>
+                    </li>
+                    <li>
+                    <div class="container">
+                        <a href data-toggle="modal" data-target="#signupModal">
+                            Sign Up
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="container">
+                        <a href data-toggle="modal" data-target="#signupModal">
+                            Logout
+                        </a>
+                    </div>
                 {% endif %}
                 </li>
         </ul>

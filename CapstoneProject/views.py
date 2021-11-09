@@ -63,8 +63,9 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                form = NewUserForm()
                 messages.info(request, "You are now logged in as {username}.")
-                return render(request, "home.html")
+                return render(request, "home.html",context={"register_form": form, "login_form": log})
             else:
                 messages.error(request, "Invalid username or password.")
         else:
