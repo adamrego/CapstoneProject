@@ -1,67 +1,74 @@
-from django.contrib.auth import authenticate, login
+from django.shortcuts import  render, redirect
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.checks import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views import View
-from Classes.functions import *
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login, authenticate
 from django.contrib import messages
-from .forms import NewUserForm
+
+
+from CapstoneProject.forms import NewUserForm
+from Classes.functions import *
 
 
 class Home(View):
     def get(self, request):
-        return render(request, "home.html", {})
+        form = NewUserForm()
+        log = AuthenticationForm()
+        return render(request, "home.html", context={"register_form": form, "login_form": log})
 
 
 def redirect_home(request):
-    response = redirect('/Home/')
-    return render(request, "home.html")
+    form = NewUserForm()
+    log = AuthenticationForm()
+    return render(request, "home.html", context={"register_form": form, "login_form": log})
 
 
 def redirect_about(request):
-    response = redirect('/about/')
-    return render(request, "about.html")
+    form = NewUserForm()
+    log = AuthenticationForm()
+    return render(request, "about.html", context={"register_form": form, "login_form": log})
 
 
 def redirect_lanes(request):
-    response = redirect('/lanes/')
-    return render(request, "lanes.html")
+    form = NewUserForm()
+    log = AuthenticationForm()
+    return render(request, "lanes.html", context={"register_form": form, "login_form": log})
 
 
 def redirect_pools(request):
-    response = redirect('/pools/')
-    return render(request, "pools.html")
+    form = NewUserForm()
+    log = AuthenticationForm()
+    return render(request, "pools.html",context={"register_form": form, "login_form": log})
 
 
-def register_request(request):
+def register(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, "Registration successful." )
-            return redirect("main:homepage")
-        messages.error(request, "Unsuccessful registration. Invalid information.")
+            return render(request, "home.html")
     form = NewUserForm()
-    return render (request=request, template_name="main/register.html", context={"register_form":form})
+    log = AuthenticationForm()
+    return render(request=request, template_name="home.html", context={"register_form": form, "login_form": log})
 
 
 def login_request(request):
     if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
+        log = AuthenticationForm(request, data=request.POST)
+        if log.is_valid():
+            username = log.cleaned_data.get('username')
+            password = log.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.info(request, f"You are now logged in as {username}.")
-                return redirect("main:homepage")
+                messages.info(request, "You are now logged in as {username}.")
+                return render(request, "home.html")
             else:
                 messages.error(request, "Invalid username or password.")
         else:
             messages.error(request, "Invalid username or password.")
-    form = AuthenticationForm()
-    return render(request=request, template_name="main/login.html", context={"login_form": form})
+    form = NewUserForm()
+    log = AuthenticationForm()
+    return render(request=request, template_name="home.html", context={"register_form": form, "login_form": log})
