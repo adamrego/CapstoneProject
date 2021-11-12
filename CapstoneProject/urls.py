@@ -23,7 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Home.as_view()),
     path('About/', redirect_about),
-    path('Lanes/', redirect_lanes),
     path('Pools/', redirect_pools),
     path('Home/', redirect_home),
     path("register/", register, name="register")

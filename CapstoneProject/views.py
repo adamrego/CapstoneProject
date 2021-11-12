@@ -1,11 +1,10 @@
-from django.shortcuts import  render, redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.checks import messages
 from django.shortcuts import render
 from django.views import View
 from django.contrib import messages
-
 
 from CapstoneProject.forms import NewUserForm
 from Classes.functions import *
@@ -30,16 +29,10 @@ def redirect_about(request):
     return render(request, "about.html", context={"register_form": form, "login_form": log})
 
 
-def redirect_lanes(request):
-    form = NewUserForm()
-    log = AuthenticationForm()
-    return render(request, "lanes.html", context={"register_form": form, "login_form": log})
-
-
 def redirect_pools(request):
     form = NewUserForm()
     log = AuthenticationForm()
-    return render(request, "pools.html",context={"register_form": form, "login_form": log})
+    return render(request, "pools.html", context={"register_form": form, "login_form": log})
 
 
 def register(request):
@@ -65,7 +58,7 @@ def login_request(request):
                 login(request, user)
                 form = NewUserForm()
                 messages.info(request, "You are now logged in as {username}.")
-                return render(request, "home.html",context={"register_form": form, "login_form": log})
+                return render(request, "home.html", context={"register_form": form, "login_form": log})
             else:
                 messages.error(request, "Invalid username or password.")
         else:
