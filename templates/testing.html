@@ -6,14 +6,53 @@
 </head>
 
 <body>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+{% block extrascripts %}
 
+    <script>
 
-<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FChicago&src=cG9vbGxhbmVzY2hlZHVsZXJAZ21haWwuY29t&color=%23039BE5" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-<!-- <script type="module">
-  import {addTime} from './index.js'
-    var button = document.getElementById("button");
-  button.addEventListener("click",addTime);
-</script> -->
+    const { google } = require('googleapis')
 
+const { OAuth2 } = google.auth
+
+const oAuth2Client = new OAuth2('284055104109-ap27pktkgqlhfq6hk8cs7t7ngvnnfljr.apps.googleusercontent.com',
+                                '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'
+)
+
+oAuth2Client.setCredentials({
+    refresh_token: '1//047u_-meW4iijCgYIARAAGAQSNwF-L9IrJEFVOEIDA7-P8HbJEpHMy_JgzDRWxBSlXAjBKgQooFQ-XzU-rEoDfIjNoWZ_naKOdmE',
+})
+
+const calendar = google.calendar({version: 'v3', auth: oAuth2Client})
+
+/* STATIC EXAMPLE, SHOULD GET DATA FROM FORMS IN FRONT END */
+const eventStartTime = new Date()
+eventStartTime.setDate(eventStartTime.getDate() + 1)
+
+const eventEndTime = new Date()
+eventEndTime.setDate(eventEndTime.getDate() + 1)
+eventEndTime.setMinutes(eventEndTime.getMinutes() + 45)
+
+const event = {
+    summary: 'Time Slot',
+    location: 'Lane 5',
+    description: 'Swimmer Username2',
+    start:{
+        dateTime: eventStartTime,
+        timezone: 'America/Chicago'
+    },
+    end: {
+        dateTime: eventEndTime,
+        timezone: 'America/Chicago'
+    },
+     colorId: 1,
+}
+
+calendar.events.insert({
+    'calendarId': 'primary',
+    'resource': event });
+
+</script>
+{% endblock %}
 </body>
 </html>

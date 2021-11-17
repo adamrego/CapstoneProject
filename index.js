@@ -1,3 +1,6 @@
+
+
+
 const { google } = require('googleapis')
 
 const { OAuth2 } = google.auth
@@ -40,7 +43,7 @@ calendar.events.insert({
     'resource': event });
 
 
-const event2 = {
+/*const event2 = {
     summary: 'Open Swim Time',
     location: 'Lane 3',
     description: '???',
@@ -56,7 +59,7 @@ const event2 = {
         'RRULE:FREQ=WEEKLY;UNTIL=20110701T170000Z',
     ],
      colorId: 1,
-}
+}*/
 /*
 calendar.freebusy.query(
     {
