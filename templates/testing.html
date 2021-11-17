@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <html>
 <head>
     <meta charset="utf-8"><title>my webpage</title>
@@ -9,12 +9,12 @@
 
 <body>
 
-{% block extrascripts %}
 
     <script src="require.js">
 
     const { google } = require('googleapis')
-
+</script>
+<script>
 const { OAuth2 } = google.auth
 
 const oAuth2Client = new OAuth2('284055104109-ap27pktkgqlhfq6hk8cs7t7ngvnnfljr.apps.googleusercontent.com',
@@ -55,6 +55,6 @@ calendar.events.insert({
     'resource': event });
 
 </script>
-{% endblock %}
+</script>
 </body>
 </html>
