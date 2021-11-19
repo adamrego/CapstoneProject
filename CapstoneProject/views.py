@@ -22,6 +22,11 @@ def redirect_home(request):
     log = AuthenticationForm()
     return render(request, "home.html", context={"register_form": form, "login_form": log})
 
+def redirect_profile(request):
+    form = NewUserForm()
+    log = AuthenticationForm()
+    return render(request, "editProfile.html", context={"register_form": form, "login_form": log})
+
 
 def redirect_about(request):
     form = NewUserForm()
