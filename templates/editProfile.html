@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+{% block header %}
+    <h1 id="userName">USERNAME</h1>
+    <form class="form-group-row" method="post">
+        {% csrf_token %}
+    </form>
+{% endblock %}
+
+
+{% block middle_section %}
+ <form>
+    <label for="fname">First name:</label><br>
+    <input type="text" id="fname" name="fname" ><br>
+
+    <label for="lname">Last name:</label><br>
+    <input type="text" id="lname" name="lname"><br>
+
+    <label for="email">Email:</label><br>
+    <input type="text" id="email" name="email"><br>
+
+    <label for="password1">Password</label><br>
+    <input type="password" id="password1" name="password1"><br>
+
+    <label for="password2">Please Re enter Password:</label><br>
+    <input type="password" id="password2" name="password2"><br><br>
+
+     <input type="submit" value="Submit Changes">
+</form>
+
+    <script>
+    document.onload = loadInfo();
+    function loadInfo() {
+        console.log("PageStart");
+        const userName = document.getElementById("userName");
+        const fname = document.getElementById("fname");
+        const lname = document.getElementById("lname");
+        const email = document.getElementById("email");
+        const pass1 = document.getElementById("password1");
+        const pass2 = document.getElementById("password2");
+
+        userName.innerHTML = "TheDon5"
+        email.value = "alex.donahoe95@gmail.com"
+        fname.value = "Alex"
+        lname.value = "Donahoe"
+        pass1.value = "password"
+        pass2.value = "password"
+    }
+</script>
+
+{% endblock %}
