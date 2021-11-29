@@ -1,0 +1,33 @@
+.center{
+    margin-top: 150px;
+    text-align: center;
+}
+h1
+{
+    color: #0c7b93;
+    display: inline;
+}
+
+h3{
+    color: #043b5d;
+    display: inline;
+}
+.content ul {
+    display: inline-block;
+    text-align: left;
+    list-style: none;
+    font-size: 30px;
+}
+
+.form-group-row .btn-secondary{
+    margin-top: 17px;
+}
+
+.form-group-row {
+    float: right;
+    padding-top: 10px;
+}
+
+.sticky{
+    background: none;
+}

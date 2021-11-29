@@ -18,6 +18,8 @@ from CapstoneProject import views
 from CapstoneProject.views import *
 from django.urls import path, include
 
+
+
 urlpatterns = [
     path('login/', login_request, name="login"),
     path('admin/', admin.site.urls),
@@ -26,7 +28,8 @@ urlpatterns = [
     path('Pools/', redirect_pools),
     path('Home/', redirect_home),
     path('Profile/', redirect_profile),
-    path("register/", register, name="register")
+    path("register/", register, name="register"),
+    path("editProfile/", editProfile)
 
 
 ]

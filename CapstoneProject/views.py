@@ -1,11 +1,9 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.checks import messages
-from django.shortcuts import render
-from django.views import View
 from django.contrib import messages
-
+from django.shortcuts import render, redirect
+from django.views import View
 from CapstoneProject.forms import NewUserForm
 from Classes.functions import *
 
@@ -21,6 +19,7 @@ def redirect_home(request):
     form = NewUserForm()
     log = AuthenticationForm()
     return render(request, "home.html", context={"register_form": form, "login_form": log})
+
 
 def redirect_profile(request):
     form = NewUserForm()
@@ -71,3 +70,17 @@ def login_request(request):
     form = NewUserForm()
     log = AuthenticationForm()
     return render(request=request, template_name="home.html", context={"register_form": form, "login_form": log})
+
+
+def editProfile(View):
+    def get(self, request):
+        user = User.objects.get(username=request.session["account"])
+        request.session["account"] = ""
+        return render(request, "editProfile.html", {"user": user})
+
+    def post(self, request):
+
+        editAccount(request.POST['update_account'],
+                    request.POST.get('name'), request.POST.get('password'))
+
+        return redirect('/editProfile/')
