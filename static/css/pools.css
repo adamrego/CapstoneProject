@@ -15,7 +15,6 @@ h3{
     display: inline;
 }
 .content ul {
-    display: inline-block;
     text-align: left;
     list-style: none;
     font-size: 30px;
