@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block header %}
-    {% load static %} <p style="text-align:center;"><img src="{% static "Media/Pooley.jpg" %}" alt="Pooley Logo" height="75" width="200" class="image"/></p>
+    {% load static %} <p style="text-align:center;"><img src="{% static "Media/Pooley.jpg" %}" alt="Pooley Logo" height="175" width="425" class="image"/></p>
     <form class="form-group-row" method="post">
         {% csrf_token %}
     </form>
@@ -16,7 +16,7 @@
     <div class="center">
         <div class="content">
             <ul>
-            <h1>MAIN PAGE</h1>
+                {% load static %} <p style="text-align:center;"><img src="{% static "Media/poolHome.jpg" %}" alt="Pool Lanes" height="350" width="700" class="image"/></p>
             </ul>
         </div>
     </div>
