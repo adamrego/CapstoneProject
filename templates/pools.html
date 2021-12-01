@@ -8,7 +8,7 @@
             <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
             <!-- Bootstrap JS -->
             <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
-            <link rel="stylesheet" type="text/css" href="{% static 'css/pools.css' %}?version=2">
+            <link rel="stylesheet" type="text/css" href="{% static 'css/pools.css' %}?version=5">
 {% endblock %}
 
 {% block header %}
@@ -21,9 +21,13 @@
 
 {% block middle_section %}
     <div class="center">
+    {{ request.user.username|json_script:"user_id" }}
         <div class="content">
             <table><tr>
-                <ul>
+                            <input type="checkbox" id="adminDisplay" onclick="changeDisplay()"><label>Toggle For Admin Display</label>
+                <div class="center" id="poolStart"></div>
+                <ul id="dateTime">
+
                     <label>Pick a Date and Time: </label>
                     <input id="calender" class="dateSelector" type="date" onchange="updateDate(this.value)">
                     <select class="dateSelector" name="cars" id="time">
@@ -36,9 +40,11 @@
                 </ul>
                 </tr>
                 </table>
-                <div class="center" id="poolStart"></div>
+
             </ul>
-<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FChicago&showTitle=0&src=cG9vbGxhbmVzY2hlZHVsZXJAZ21haWwuY29t&color=%23039BE5" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            <table id="res"> <label id="resOpen"></label>
+
+            </table>
         </div>
     </div>
 
@@ -218,8 +224,24 @@ request.execute(function(event) {
 <script>
 document.onload = pageStart();
 function pageStart(){
-    console.log("PageStart");
-    createPool(8,[false,false,false,true,true,true,false,true]);
+    //dummy display times reserved
+
+    const res =  document.getElementById('resOpen');
+    res.insertAdjacentHTML('beforeend','<h1>Current Reservations</h1><br><label id="reserve"></label>');
+    res.insertAdjacentHTML('beforeend','<label>1030pm - 1130pm 1/2/1996</label><br>');
+    res.insertAdjacentHTML('beforeend','<label>1130pm - 1230pm 1/2/1996</label><br>');
+
+    //display a reservation time
+    const time = document.getElementById('adminDisplay').checked;
+    const user_id = JSON.parse(document.getElementById('user_id').textContent);
+    console.log("PageStart" + time);
+    let admin = document.getElementById('adminDisplay').checked;
+    if(admin){
+        changeDisplay()
+    }
+    else {
+        createPool(8, [false, false, false, true, true, true, false, true]);
+    }
 }
 function updateTextInput(val) {
           document.getElementById('textInput').value=val;
@@ -238,9 +260,46 @@ function updateDate(val){
     //need to create loop but this adds a selection of 7:00pm to the selector
     time.insertAdjacentHTML('beforeend', '<option value="7:00 pm" onclick="updateTime(value)">7:00 pm</option>')
 }
+function changeDisplay()
+{
+    console.log("ChangeDisplay")
+    const resOpen =  document.getElementById('resOpen');
+    const dateTime =  document.getElementById('dateTime');
+    const res =  document.getElementById('res');
+    let admin = document.getElementById('adminDisplay').checked;
+    const pool = document.getElementById("poolStart");
+    document.getElementById("poolStart").innerHTML = ""
+    document.getElementById("res").innerHTML = ""
+    document.getElementById("resOpen").innerHTML = ""
+    if(admin){
+        resOpen.hidden = true
+        dateTime.hidden = true
+        res.insertAdjacentHTML('beforeend', '<ul id="dateTime"><label>Add open Swim times to Pool: </label></div><br>' +
+                                            '<input type="date" id="start" name="trip-start">'  +
+                                            '<input type="time" id="appt" name="appt" min="09:00" max="18:00" required>' +
+                                            '<input type="time" id="appt" name="appt" min="09:00" max="18:00" required>' +
+                                            '<input type="button" value="Submit"> </ul>');
+        document.getElementById('time').hidden = true
+        pool.insertAdjacentHTML('beforeend', '<iframe class="column" src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FChicago&showTitle=0&src=cG9vbGxhbmVzY2hlZHVsZXJAZ21haWwuY29t&color=%23039BE5" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>');
+    }
+    else{
+        resOpen.hidden = false
+        dateTime.hidden = false
+        document.getElementById('time').hidden = false
+        createPool(8,[false,false,false,true,true,true,false,true]);
+        resOpen.insertAdjacentHTML('beforeend','<h1>Current Reservations</h1><br><label id="reserve"></label>');
+        resOpen.insertAdjacentHTML('beforeend','<label>1030pm 1/2/1996</label><br>');
+        resOpen.insertAdjacentHTML('beforeend','<label>1130pm 1/2/1996</label><br>');
+    }
+}
 function createPool(numLanes, taken){
+    let admin = document.getElementById('adminDisplay').checked;
     //takes in int of lanes and an array of bool that shows if the lane is taken or not
     const pool = document.getElementById("poolStart");
+    if(admin){
+         //pool.insertAdjacentHTML('beforeend', '<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FChicago&showTitle=0&src=cG9vbGxhbmVzY2hlZHVsZXJAZ21haWwuY29t&color=%23039BE5" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>');
+    }
+    else{
     for(let i = 0; i < numLanes; i++){
         if(taken[i] == false) {
             //console.log("Open")
@@ -268,7 +327,7 @@ function createPool(numLanes, taken){
                     '</div>' +
                 '</div>');
         }
-
+        }
     }
 }
 </script>
