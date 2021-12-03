@@ -49,13 +49,15 @@
         </div>
     </div>
 
+
 <!--Reserve Pop up Modal -->
      <div class="modal fade" id="reserveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+             aria-hidden="true" >
+
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header border-bottom-0">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -66,18 +68,32 @@
                         <div class="d-flex flex-column text-center">
                             <form>
                                 <div class="form-group">
-                                    <input type="text" id="textInput" value="">
-                                <label for="fullName"></label><input type="range" min="15" max="60" step="15" name="rangeInput" class="form-control" id="fullName"
-                                                                       placeholder="Your Full Name..." onchange="updateTextInput(this.value);">
+
+                                    <!--
+                                    <label for="username">Username:</label><br>
+  <input type="text" id="username" name="username"><br>
+
+
+                   SHOULD NOT BE NEEDED
+
+    <label for="lane">Lane:</label><br>
+   <input type="lane" id="lane" name="lane" value="document.getElementById('middle\').innerHTML"><br>
+                                    <input type="lane" id="lane" name="lane"><br>
+
+            -->
+                                <input type="range" value="15" min="15" max="60" step="15" class="form-control" oninput="this.nextElementSibling.value = this.value">
+                                <input type="text" id="time2" name="time2" value = "15" size="1" readonly> minutes<br><br>
                                 </div>
                                 {% csrf_token %}
-                                <button class="btn btn-primary" type="submit">Reserve</button>
+
+                                <button class="btn btn-primary" type="submit" onclick="createNewEvent('adamrego' , '3' , document.getElementById('time2').value )">Reserve</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 <!--Add buttons to initiate auth sequence and sign out-->
     <button id="authorize_button" style="display: none;">Authorize</button>
     <button id="signout_button" style="display: none;">Sign Out</button>
@@ -175,7 +191,14 @@
        * the authorized user's calendar. If no events are found an
        * appropriate message is printed.
        */
-      function createNewEvent(name, lane) {
+      function createNewEvent(name, lane, howLong) {
+
+          //const x = document.getElementsByClassName("text").innerHTML;
+          const x = document.getElementById("text").title;
+          console.log("Lane: " + x);
+          lane = x
+          name = "adamrego"
+          //alert(howLong);
 
           const date = document.getElementById('calender').value;
           //console.log("updateDate2: " + date);
@@ -191,7 +214,7 @@
     'timeZone': 'America/Chicago'
   },
   'end': {
-    'dateTime': date + 'T18:30:00-07:00',
+    'dateTime': date + 'T18:' + howLong + ':00-07:00',
     'timeZone': 'America/Chicago'
   },
 };
@@ -214,13 +237,13 @@ request.execute(function(event) {
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
 
-<label for="username">Username:</label><br>
+{% comment %}<label for="username">Username:</label><br>
   <input type="text" id="username" name="username"><br>
 
     <label for="lane">Lane:</label><br>
   <input type="lane" id="lane" name="lane"><br>
 
-<input id="submitButton" type="button" value="Reserve" onclick="createNewEvent(document.getElementById('username').value , document.getElementById('lane').value)" />
+<input id="submitButton" type="button" value="Reserve" onclick="createNewEvent(document.getElementById('username').value , document.getElementById('lane').value)" />{% endcomment %}
 
 <script>
 document.onload = pageStart();
@@ -293,6 +316,14 @@ function changeDisplay()
         resOpen.insertAdjacentHTML('beforeend','<label>1130pm 1/2/1996</label><br>');
     }
 }
+
+
+
+function getLaneNumber() {
+    const contents = document.getElementById('text').title;
+    alert(contents);
+}
+
 function createPool(numLanes, taken){
     let admin = document.getElementById('adminDisplay').checked;
     //takes in int of lanes and an array of bool that shows if the lane is taken or not
@@ -303,19 +334,27 @@ function createPool(numLanes, taken){
     else{
     for(let i = 0; i < numLanes; i++){
         if(taken[i] == false) {
+            //alert(i + 1)
+
+            window.laneNumber = i + 1;
+
+            //document.getElementById('text').src=i;
             //console.log("Open")
             pool.insertAdjacentHTML('beforeend',
                 '<div class="column">' +
                     '<div class= "container">' +
                         '{% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500" width="125" class="image" />' +
                         '<a href data-toggle="modal" data-target="#reserveModal">' +
-                            '<div class="middle\">' +
-                                '<div class="text">Reserve Lane</div>' +
+                            '<div class="middle\" id="12345">' +
+                                '<div class="text" id="text" src="" title=3>Reserve Lane</div>' +
                            ' </div>' +
                             '</a>' +
                     '</div>' +
-                '</div>');
+                '</div>'
+    );
+            //document.getElementById('text').title=laneNumber.toString();
         }
+
         else {
             console.log("Taken")
             pool.insertAdjacentHTML('beforeend',
@@ -323,7 +362,7 @@ function createPool(numLanes, taken){
                     '<div class="container">' +
                             '{% load static %} <img src="{% static "Media/takenLane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />' +
                             '<div class="middle">'+
-                               ' <div class="textReserved">Lane Taken</div>'+
+                               ' <div class="textReserved">Lane Taken</div>'+ (i +1) +
                            ' </div>'+
                     '</div>' +
                 '</div>');
