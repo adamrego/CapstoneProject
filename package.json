@@ -10,7 +10,7 @@
     "requirejs": "^2.3.6"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "C:/CapstoneProject/manage.py runserver 8000"
   },
   "repository": {
     "type": "git",
