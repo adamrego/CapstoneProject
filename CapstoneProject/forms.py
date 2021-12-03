@@ -7,7 +7,7 @@ from django.views.generic import UpdateView
 
 # Create your forms here.
 from django.core.checks import messages
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render
 
 
 class NewUserForm(UserCreationForm):
