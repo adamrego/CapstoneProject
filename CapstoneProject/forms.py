@@ -3,11 +3,11 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from django.views.generic import UpdateView
 
 # Create your forms here.
 from django.core.checks import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
 
 class NewUserForm(UserCreationForm):
@@ -42,3 +42,18 @@ def login_request(request):
             messages.error(request, "Invalid username or password.")
     form = AuthenticationForm()
     return render(request=request, template_name="home.html", context={"login_form": form})
+
+
+class editProfile(UpdateView):
+    class Meta:
+        model = User
+        fields = ("username", "email")
+
+    def save(self, commit=True):
+        user = self
+        # user.email = forms.cleaned_data.get['email']
+
+        if commit:
+            user.save()
+
+        return user

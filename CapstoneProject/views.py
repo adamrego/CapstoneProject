@@ -72,15 +72,10 @@ def login_request(request):
     return render(request=request, template_name="home.html", context={"register_form": form, "login_form": log})
 
 
-def editProfile(View):
-    def get(self, request):
-        user = User.objects.get(username=request.session["account"])
-        request.session["account"] = ""
-        return render(request, "editProfile.html", {"user": user})
+def editProfile(request):
+    if request.method == "POST":
+        form = editProfile(request)
 
-    def post(self, request):
-
-        editAccount(request.POST['update_account'],
-                    request.POST.get('name'), request.POST.get('password'))
-
-        return redirect('/editProfile/')
+        if form.is_valid():
+            form.save()
+            return render(request, "home.html")

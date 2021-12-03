@@ -13,8 +13,9 @@
 
 
 {% block middle_section %}
+    <form method="post">
+    {% csrf_token %}
     <div class="center">
-        <img src="/static/images/logo1.svg">
         <div align="center">
             <div class="content">
                 <table class="table1" cellspacing="50">
@@ -24,7 +25,7 @@
                             <input name="name" class="form-control" type="text"
                                    value="{{ user.username}}">
                         </td>
-                        <tr>
+                    <tr>
                         <td>
                             <h3>Email:</h3>
                             <input type="email" name="email" class="form-control" value="{{ user.email }}">
