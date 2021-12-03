@@ -208,7 +208,7 @@
           var event = {
   'summary': name,
   'location': 'Lane ' + lane,
-  'description': name + ' has reserved lane ' + lane + ' for 30 minutes',
+  'description': name + ' has reserved lane ' + lane + ' for ' + howLong + ' minutes',
   'start': {
     'dateTime': date + 'T18:00:00-07:00',
     'timeZone': 'America/Chicago'
@@ -362,7 +362,7 @@ function createPool(numLanes, taken){
                     '<div class="container">' +
                             '{% load static %} <img src="{% static "Media/takenLane.jpg" %}" alt="Pool" usemap="#workmap" height="500 "width="125" class="image" />' +
                             '<div class="middle">'+
-                               ' <div class="textReserved">Lane Taken</div>'+ (i +1) +
+                               ' <div class="textReserved">Lane Taken</div>'+
                            ' </div>'+
                     '</div>' +
                 '</div>');
