@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from fabio import project
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -27,7 +29,7 @@ SECRET_KEY = 'django-insecure-g-w1&8(e8h^rm3g_$8vh8s-%^+c@fr#zj5=5wrp2_h*&uce%%u
 DEBUG = True
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
