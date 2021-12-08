@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
 from CapstoneProject.forms import NewUserForm
-from Classes.functions import *
+from django.contrib.auth import logout
+
 
 
 class Home(View):
@@ -14,6 +15,11 @@ class Home(View):
         log = AuthenticationForm()
         return render(request, "home.html", context={"register_form": form, "login_form": log})
 
+def logout_view(request):
+    logout(request)
+    form = NewUserForm()
+    log = AuthenticationForm()
+    return render(request, "home.html", context={"register_form": form, "login_form": log})
 
 def redirect_home(request):
     form = NewUserForm()
