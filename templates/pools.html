@@ -25,7 +25,14 @@
     {{ request.user.username|json_script:"user_id" }}
         <div class="content">
             <table><tr>
-                            <input type="checkbox" id="adminDisplay" onclick="changeDisplay()"><label>Toggle For Admin Display</label>
+
+                            <label for="adminDisplay"></label> <input type="hidden" id="adminDisplay" onclick="changeDisplay()" >
+                <script>
+                    if(("{{ user.username }}" == "marla")) {
+                        document.getElementById('adminDisplay').type="checkbox";
+                    }
+                    </script>
+
                 <div class="center" id="poolStart"></div>
                 <ul id="dateTime">
 
@@ -52,7 +59,7 @@
 
 <!--Reserve Pop up Modal -->
      <div class="modal fade" id="reserveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true" >
+             aria-hidden="true">
 
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -66,7 +73,7 @@
                             <h4>Reserve A Lane</h4>
                         </div>
                         <div class="d-flex flex-column text-center">
-                            <form>
+
                                 <div class="form-group">
 
                                     <!--
@@ -86,13 +93,18 @@
                                 </div>
                                 {% csrf_token %}
 
-                                <button class="btn btn-primary" type="submit" onclick="createNewEvent('adamrego' , '3' , document.getElementById('time2').value )">Reserve</button>
+                                <button class="btn btn-primary" data-dismiss="modal" type="button" onclick="createNewEvent(document.getElementById('time2').value )">Reserve</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+    <script>
+ const xyz = document.getElementById("reserveModal").title
+ //alert(xyz)
+    </script>
 
 <!--Add buttons to initiate auth sequence and sign out-->
     <button id="authorize_button" style="display: none;">Authorize</button>
@@ -186,30 +198,43 @@
         pre.appendChild(textContent);
       }
 
-      /**
-       * Print the summary and start datetime/date of the next ten events in
-       * the authorized user's calendar. If no events are found an
-       * appropriate message is printed.
-       */
-      function createNewEvent(name, lane, howLong) {
+      function getLaneNumber(number) {
+    //const number = document.getElementById('text').title;
+          window.lane=number;
+          let today = new Date().toISOString().slice(0, 10);
+          if(("{{ user.username }}" == "")) {
+              alert("Please log in first");
+              location.reload()
+          }
+          else if(document.getElementById('calender').value == ""){
+              alert("Please select a date first");
+              location.reload()
+          }
+          else if(document.getElementById('calender').value < today){
+              alert("Select a date that makes sense");
+              location.reload()
+          }
+}
+      function createNewEvent(howLong) {
+          const lane = window.lane
+          console.log("Lane: " + lane);
+          //lane = x
+          const name = "{{ user.username }}"
+          const name2 = name.toString()
 
-          //const x = document.getElementsByClassName("text").innerHTML;
-          const x = document.getElementById("text").title;
-          console.log("Lane: " + x);
-          lane = x
-          //name = {{ user.username }}
-          name = "test name"
-          //alert(howLong);
+            const time = "7 PM" //Just for display
 
           const date = document.getElementById('calender').value;
           //console.log("updateDate2: " + date);
           //const time = document.getElementById('value').value;
           //console.log("time: " + time);
 
+            document.getElementById("timeReservation").innerHTML= "The user: " + name2 + " has reserved lane " + lane + " on " + date + " at " + time + " for " + howLong + " minutes."
+
           var event = {
-  'summary': name,
+  'summary': name2,
   'location': 'Lane ' + lane,
-  'description': name + ' has reserved lane ' + lane + ' for ' + howLong + ' minutes',
+  'description': name2 + ' has reserved lane ' + lane + ' for ' + howLong + ' minutes',
   'start': {
     'dateTime': date + 'T18:00:00-07:00',
     'timeZone': 'America/Chicago'
@@ -226,7 +251,7 @@ var request = gapi.client.calendar.events.insert({
 });
 
 request.execute(function(event) {
-  appendPre('Event created!');
+
 });
       }
 
@@ -238,23 +263,18 @@ request.execute(function(event) {
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
 
-{% comment %}<label for="username">Username:</label><br>
-  <input type="text" id="username" name="username"><br>
-
-    <label for="lane">Lane:</label><br>
-  <input type="lane" id="lane" name="lane"><br>
-
-<input id="submitButton" type="button" value="Reserve" onclick="createNewEvent(document.getElementById('username').value , document.getElementById('lane').value)" />{% endcomment %}
 
 <script>
+
 document.onload = pageStart();
 function pageStart(){
     //dummy display times reserved
 
     const res =  document.getElementById('resOpen');
+    res.insertAdjacentHTML('beforeend','<p>CLICK HERE FOR ADMIN ACCESS</p>');
     res.insertAdjacentHTML('beforeend','<h1>Current Reservations</h1><br><label id="reserve"></label>');
-    res.insertAdjacentHTML('beforeend','<label>1030pm - 1130pm TEST TEST TEST 1/2/1996</label><br>');
-    res.insertAdjacentHTML('beforeend','<label>1130pm - 1230pm 1/2/1996</label><br>');
+    res.insertAdjacentHTML('beforeend','<div id="timeReservation">No time currently reserved</div><br>');
+
 
     //display a reservation time
     const time = document.getElementById('adminDisplay').checked;
@@ -307,23 +327,20 @@ function changeDisplay()
         document.getElementById('time').hidden = true
         pool.insertAdjacentHTML('beforeend', '<iframe class="column" src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FChicago&showTitle=0&src=cG9vbGxhbmVzY2hlZHVsZXJAZ21haWwuY29t&color=%23039BE5" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>');
     }
-    else{
+    else
         resOpen.hidden = false
         dateTime.hidden = false
         document.getElementById('time').hidden = false
         createPool(8,[false,false,false,true,true,true,false,true]);
         resOpen.insertAdjacentHTML('beforeend','<h1>Current Reservations</h1><br><label id="reserve"></label>');
-        resOpen.insertAdjacentHTML('beforeend','<label>1030pm 1/2/1996</label><br>');
-        resOpen.insertAdjacentHTML('beforeend','<label>1130pm 1/2/1996</label><br>');
-    }
+        resOpen.insertAdjacentHTML('beforeend','<label>No time currently reserved</label><br>');
+
+
 }
 
 
 
-function getLaneNumber() {
-    const contents = document.getElementById('text').title;
-    alert(contents);
-}
+
 
 function createPool(numLanes, taken){
     let admin = document.getElementById('adminDisplay').checked;
@@ -345,9 +362,9 @@ function createPool(numLanes, taken){
                 '<div class="column">' +
                     '<div class= "container">' +
                         '{% load static %} <img src="{% static "Media/1Lane.jpg" %}" alt="Pool" usemap="#workmap" height="500" width="125" class="image" />' +
-                        '<a href data-toggle="modal" data-target="#reserveModal">' +
+                        '<a href data-toggle="modal" onclick="getLaneNumber(' + laneNumber + ')" data-target="#reserveModal" data-content=' + laneNumber + '>' +
                             '<div class="middle\" id="12345">' +
-                                '<div class="text" id="text" src="" title=3>Reserve Lane</div>' +
+                                '<div class="text" id="text" title=' + laneNumber + '>Reserve Lane ' + laneNumber + '</div>' +
                            ' </div>' +
                             '</a>' +
                     '</div>' +
