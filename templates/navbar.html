@@ -69,6 +69,7 @@
                     </a>
                 </div>
             {% endif %}
+            {% if  request.user.is_authenticated %}
             <logOut><a href="/logout/">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" fill="currentColor"
                      class="bi bi-door-closed" viewBox="0 0 16 16">
@@ -77,6 +78,7 @@
                 </svg>
                 Log Out</a></logOut>
             </li>
+        {% endif %}
         </ul>
     </div>
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
