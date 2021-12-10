@@ -37,13 +37,13 @@
                 <ul id="dateTime">
 
                     <label>Pick a Date and Time: </label>
-                    <input id="calender" class="dateSelector" type="date" onchange="updateDate(this.value)">
+                    <input id="calender" class="dateSelector" type="date" onchange="listUpcomingEvents()">
                     <select class="dateSelector" name="cars" id="time">
-                        <option value="">Undefined</option>
-                        <option value="1:00 pm" onclick="updateTime(value)">1:00 pm</option>
+                        <option value="">--------</option>
+                        {% comment %}<option value="1:00 pm" onclick="updateTime(value)">1:00 pm</option>
                         <option value="2:00 pm" onclick="updateTime(value)">2:00 pm</option>
                         <option value="3:00 pm" onclick="updateTime(value)">3:00 pm</option>
-                        <option value="4:00 pm" onclick="updateTime(value)">4:00 pm</option>
+                        <option value="4:00 pm" onclick="updateTime(value)">4:00 pm</option>{% endcomment %}
                     </select>
                 </ul>
                 </tr>
@@ -164,6 +164,7 @@
       function updateSigninStatus(isSignedIn) {
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
+          //listUpcomingEvents();
           //signoutButton.style.display = 'block';
           //createNewEvent();
         } else {
@@ -215,6 +216,123 @@
               location.reload()
           }
 }
+function listUpcomingEvents() {
+        //const today = new Date()
+        //const tomorrow = new Date(today)
+        //tomorrow.setDate(tomorrow.getDate() + 1)
+        const selectedDate = document.getElementById('calender').value
+        const thisDay = new Date(selectedDate)
+        thisDay.setHours(thisDay.getHours() + 6)
+        const thisDayISO = thisDay.toISOString()
+        const nextDay = new Date(thisDay)
+        nextDay.setDate(nextDay.getDate() + 1)
+        const nextDayISO = nextDay.toISOString()
+        console.log("selected date is from : " + thisDayISO + " to " + nextDayISO)
+        //console.log("selected date with date(): " + selectedDate2)
+        //console.log("selected date as iso string: " + selectedDate3)
+        //console.log("selected date + 1 with date(): " + nextDay)
+        //console.log(document.getElementById('calender').value + 'T00:00:00-07:00')
+        gapi.client.calendar.events.list({
+          'calendarId': 'primary',
+          'timeMin': thisDayISO,
+          'timeMax': nextDayISO,
+          'showDeleted': false,
+          'singleEvents': true,
+          'maxResults': 10,
+          'orderBy': 'startTime'
+        }).then(function(response) {
+          var events = response.result.items;
+          appendPre('This dates open swim times:');
+          const time = document.getElementById('time');
+          time.options.length = 0;
+          if (events.length > 0) {
+            for (i = 0; i < events.length; i++) {
+              var event = events[i];
+              var when = event.start.dateTime;
+              var when2 = event.end.dateTime;
+              //appendPre(when  + ' ' + when2)
+              if (!when) {
+                when = event.start.date;
+              }
+              if(event.summary == "Open Swim Time") {
+                  var whenIOS = when
+                  //var when2IOS = when2
+                  const T = when.indexOf("T")
+                  const leng = when.length
+                  when = when.substring(T + 1,leng - 9)
+
+                  const T2 = when2.indexOf("T")
+                  const leng2 = when2.length
+                  when2 = when2.substring(T2 + 1,leng2 - 9)
+
+                  appendPre(when  + ' to ' + when2)
+
+                  var hoursofWhen = when.slice(0,2)
+                  var minutesofWhen = when.slice(3,5)
+
+                  var hoursofWhen2 = when2.slice(0,2)
+                  var minutesofWhen2 = when2.slice(3,5)
+
+                  //appendPre(hoursofWhen  + ' ' + minutesofWhen)
+                  //appendPre(hoursofWhen2  + ' ' + minutesofWhen2)
+
+                  while(hoursofWhen < hoursofWhen2 || minutesofWhen < minutesofWhen2) {
+                        const sTime = standardTime(hoursofWhen + ':' + minutesofWhen)
+                        const time = document.getElementById('time');
+                        time.insertAdjacentHTML('beforeend', '<option value= ' + whenIOS + ' onclick="updateTime(value)"> ' + sTime + '  </option>')
+
+                        minutesofWhen = minutesofWhen + 15
+                        if(minutesofWhen >= 60){
+                            ++hoursofWhen
+                            minutesofWhen = 0
+                        }
+
+                        //when = when.substring(0, 3) + minutesofWhen + when.substring(5, leng3)
+                  }
+
+                  {% comment %}var sTime = standardTime(when)
+
+                  const leng3 = when.length
+                  var minutesofWhen = parseInt(when.slice(3,5)) + 30
+                  //appendPre(minutesofWhen)
+                  if(minutesofWhen >= 100){
+                      var hoursofWhen = parseInt(when.slice(0,1)) + 1
+                      when = hoursofWhen + when.substring(3,leng3)
+                  }
+                  //const leng3 = when.length
+                  when = when.substring(0, 3) + minutesofWhen + when.substring(5, leng3)
+
+
+                  const time = document.getElementById('time');
+                  time.insertAdjacentHTML('beforeend', '<option value= when onclick="updateTime(value)"> ' + when + '  </option>'){% endcomment %}
+              }
+            }
+          } else {
+            appendPre('No upcoming events found.');
+          }
+        });
+
+      }
+      function standardTime(mTime) {
+          var sTime = mTime.split(':');
+
+                  var hours = Number(sTime[0]);
+                  var minutes = Number(sTime[1]);
+                  var timeValue;
+
+if (hours > 0 && hours <= 12) {
+  timeValue= "" + hours;
+} else if (hours > 12) {
+  timeValue= "" + (hours - 12);
+} else if (hours == 0) {
+  timeValue= "12";
+}
+
+timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;
+timeValue += (hours >= 12) ? " P.M." : " A.M.";
+    return timeValue
+      }
+
       function createNewEvent(howLong) {
           const lane = window.lane
           console.log("Lane: " + lane);
@@ -222,10 +340,13 @@
           const name = "{{ user.username }}"
           const name2 = name.toString()
 
-            const time = "7 PM" //Just for display
+            const time = "1 PM" //Just for display
+          //var time = document.getElementById('time').value;
+          //time = time.slice(10,13)
 
           const date = document.getElementById('calender').value;
-          //console.log("updateDate2: " + date);
+          const date2 = document.getElementById('calender')
+          console.log("updateDate2: " + date2);
           //const time = document.getElementById('value').value;
           //console.log("time: " + time);
 
@@ -236,11 +357,11 @@
   'location': 'Lane ' + lane,
   'description': name2 + ' has reserved lane ' + lane + ' for ' + howLong + ' minutes',
   'start': {
-    'dateTime': date + 'T18:00:00-07:00',
+    'dateTime': date + 'T12:00:00-07:00',
     'timeZone': 'America/Chicago'
   },
   'end': {
-    'dateTime': date + 'T18:' + howLong + ':00-07:00',
+    'dateTime': date + 'T12:' + howLong + ':00-07:00',
     'timeZone': 'America/Chicago'
   },
 };
@@ -285,7 +406,7 @@ function pageStart(){
         changeDisplay()
     }
     else {
-        createPool(8, [false, false, false, true, true, true, false, true]);
+        createPool(8, [false, false, false, false, false, false, false, false]);
     }
 }
 function updateTextInput(val) {
@@ -331,7 +452,7 @@ function changeDisplay()
         resOpen.hidden = false
         dateTime.hidden = false
         document.getElementById('time').hidden = false
-        createPool(8,[false,false,false,true,true,true,false,true]);
+        createPool(8,[false, false, false, false, false, false, false, false]);
         resOpen.insertAdjacentHTML('beforeend','<h1>Current Reservations</h1><br><label id="reserve"></label>');
         resOpen.insertAdjacentHTML('beforeend','<label>No time currently reserved</label><br>');
 
