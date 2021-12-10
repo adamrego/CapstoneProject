@@ -1,6 +1,10 @@
 .center{
-    margin-top: 150px;
-    text-align: center;
+    margin-top: 50px;
+    text-align: left;
+    width:860px;
+    /*margin-left: 120px;*/
+    font-size: 35px;
+
 }
 h1
 {
@@ -12,11 +16,12 @@ h3{
     color: #043b5d;
     display: inline;
 }
-.content ul {
+.content  {
     display: inline-block;
-    text-align: left;
+    text-align: center;
     list-style: none;
     font-size: 30px;
+    margin-left: 70px
 }
 
 .form-group-row .btn-secondary{
@@ -26,6 +31,7 @@ h3{
 .form-group-row {
     float: right;
     padding-top: 10px;
+    width:500px;
 }
 
 .sticky{
