@@ -14,10 +14,17 @@
 
 
 {% block middle_section %}
-    <div class="center">
+    <div class="align-content-sm-center">
         <div class="content">
             <ul>
-            <h1>About page</h1>
+                <p style="font-size:75%">Our goal was to solve the problem of crowded swim times at the UWM Klotsche
+                    Center. To solve this problem, we created a software that schedules open swim times so that they do
+                    not overlap with each other. By creating a user interface that allows users to and sign up for swim
+                    times manually, this software makes it easier for students to attend open swim time. As well as a
+                    user interface, this software has an administrative interface that allows staff to manage the dates
+                    and times so that overcrowding is prevented.</p>
+
+                {% load static %} <p style="text-align:center; margin-top: 75px"><img src="{% static "Media/poolLanes.jpg" %}" alt="Pool Lanes" height="350" width="700" class="image"/></p>
             </ul>
         </div>
     </div>
