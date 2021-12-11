@@ -38,13 +38,14 @@
 
                     <label>Pick a Date and Time: </label>
                     <input id="calender" class="dateSelector" type="date" onchange="listUpcomingEvents()">
-                    <select class="dateSelector" name="cars" id="time">
-                        <option value="">--------</option>
+                    <select class="dateSelector" name="cars" id="time" onchange= "updateTime(document.getElementById('time').value)">
+                        <option value="123">--------</option>
                         {% comment %}<option value="1:00 pm" onclick="updateTime(value)">1:00 pm</option>
                         <option value="2:00 pm" onclick="updateTime(value)">2:00 pm</option>
                         <option value="3:00 pm" onclick="updateTime(value)">3:00 pm</option>
                         <option value="4:00 pm" onclick="updateTime(value)">4:00 pm</option>{% endcomment %}
                     </select>
+                    <div class="hidden" id="endTimeCalc" value="01"></div>
                 </ul>
                 </tr>
                 </table>
@@ -216,6 +217,7 @@
               location.reload()
           }
 }
+
 function listUpcomingEvents() {
         //const today = new Date()
         //const tomorrow = new Date(today)
@@ -265,53 +267,67 @@ function listUpcomingEvents() {
                   const leng2 = when2.length
                   when2 = when2.substring(T2 + 1,leng2 - 9)
 
-                  appendPre(when  + ' to ' + when2)
+                  appendPre(standardTime(when)  + ' to ' + standardTime(when2))
 
-                  var hoursofWhen = when.slice(0,2)
-                  var minutesofWhen = when.slice(3,5)
+                  var hoursofWhen = when.slice(0,2).toString()
+                  var minutesofWhen = when.slice(3,5).toString()
 
-                  var hoursofWhen2 = when2.slice(0,2)
-                  var minutesofWhen2 = when2.slice(3,5)
+                  var hoursofWhen2 = when2.slice(0,2).toString()
+                  var minutesofWhen2 = when2.slice(3,5).toString()
 
                   //appendPre(hoursofWhen  + ' ' + minutesofWhen)
                   //appendPre(hoursofWhen2  + ' ' + minutesofWhen2)
+                  if(minutesofWhen2 == 50) {
+                      minutesofWhen2 = 45
+                  }
 
                   while(hoursofWhen < hoursofWhen2 || minutesofWhen < minutesofWhen2) {
                         const sTime = standardTime(hoursofWhen + ':' + minutesofWhen)
                         const time = document.getElementById('time');
-                        time.insertAdjacentHTML('beforeend', '<option value= ' + whenIOS + ' onclick="updateTime(value)"> ' + sTime + '  </option>')
+                        if(minutesofWhen == 0) {
+                            minutesofWhen = String(minutesofWhen).padStart(2,'0')
+                        }
+                        hoursofWhen = String(hoursofWhen).padStart(2,'0')
+                        const newTime = whenIOS.slice(0,11) + hoursofWhen.toLocaleString() + ':' + minutesofWhen.toLocaleString() + ':00-06:00'
+                        //document.getElementById('time').value = sTime
 
-                        minutesofWhen = minutesofWhen + 15
-                        if(minutesofWhen >= 60){
+                        document.getElementById('endTimeCalc').value = minutesofWhen2
+
+                        time.insertAdjacentHTML('beforeend', '<option value= ' + newTime + '> ' + sTime + '  </option>')
+
+                        minutesofWhen = parseInt(minutesofWhen) + 15
+                        if(parseInt(minutesofWhen) >= 60){
                             ++hoursofWhen
                             minutesofWhen = 0
                         }
 
-                        //when = when.substring(0, 3) + minutesofWhen + when.substring(5, leng3)
+
                   }
 
-                  {% comment %}var sTime = standardTime(when)
-
-                  const leng3 = when.length
-                  var minutesofWhen = parseInt(when.slice(3,5)) + 30
-                  //appendPre(minutesofWhen)
-                  if(minutesofWhen >= 100){
-                      var hoursofWhen = parseInt(when.slice(0,1)) + 1
-                      when = hoursofWhen + when.substring(3,leng3)
-                  }
-                  //const leng3 = when.length
-                  when = when.substring(0, 3) + minutesofWhen + when.substring(5, leng3)
-
-
-                  const time = document.getElementById('time');
-                  time.insertAdjacentHTML('beforeend', '<option value= when onclick="updateTime(value)"> ' + when + '  </option>'){% endcomment %}
               }
+              else{
+                  window.mainArray = []
+                  var lane = event.location
+                  var timeOfReservation = event.start.dateTime
+                  addTime(lane, timeOfReservation)
+                  {% comment %}document.getElementById("poolStart").innerHTML = ""
+                  const startTime = document.getElementById('time').value;
+                  alert(startTime)
+                  createPool(8,[false, false, true, false, false, false, false, false]);
+                  alert(timeOfReservation){% endcomment %}
+              }
+
             }
           } else {
             appendPre('No upcoming events found.');
           }
         });
 
+      }
+      function addTime(lane, timeOfReservation) {
+          let array1 = [lane, timeOfReservation]
+          window.mainArray = window.mainArray.concat(array1)
+          //alert(mainArray)
       }
       function standardTime(mTime) {
           var sTime = mTime.split(':');
@@ -340,28 +356,42 @@ timeValue += (hours >= 12) ? " P.M." : " A.M.";
           const name = "{{ user.username }}"
           const name2 = name.toString()
 
-            const time = "1 PM" //Just for display
+           //const time = "1 PM" //Just for display
           //var time = document.getElementById('time').value;
           //time = time.slice(10,13)
 
           const date = document.getElementById('calender').value;
           const date2 = document.getElementById('calender')
-          console.log("updateDate2: " + date2);
-          //const time = document.getElementById('value').value;
-          //console.log("time: " + time);
+          //console.log("updateDate2: " + date2);
+          const startTime = document.getElementById('time').value;
+          console.log("date: " + startTime);
+          var hoursOfEndTime = startTime.slice(11,13)
+          var minutesOfEndTime = startTime.slice(14,16)
+          console.log("hours: " + hoursOfEndTime + " minutes: " + minutesOfEndTime + " how long: " + howLong);
+          minutesOfEndTime = parseInt(howLong) + parseInt(minutesOfEndTime)
+          if(minutesOfEndTime >= 60){
+              minutesOfEndTime = minutesOfEndTime - 60
+              ++hoursOfEndTime
+          }
+          //console.log("hours: " + String(hoursOfEndTime).padStart(2,'0') + " minutes: " + String(minutesOfEndTime).padStart(2,'0'));
 
-            document.getElementById("timeReservation").innerHTML= "The user: " + name2 + " has reserved lane " + lane + " on " + date + " at " + time + " for " + howLong + " minutes."
+          var endTime = startTime.slice(0,11) + String(hoursOfEndTime).padStart(2,'0') + ":" + String(minutesOfEndTime).padStart(2,'0') + ":00-06:00"
+
+          console.log("ENDTIME: " + document.getElementById('endTimeCalc').value)
+
+          document.getElementById("timeReservation").innerHTML= "The user: " + name2 + " has reserved lane " + lane + " on " + date + " at " + standardTime(startTime.slice(11,16)) + " for " + howLong + " minutes."
+          //document.getElementById("timeReservation").innerHTML= "Successfully signed up for a lane time slot"
 
           var event = {
   'summary': name2,
   'location': 'Lane ' + lane,
   'description': name2 + ' has reserved lane ' + lane + ' for ' + howLong + ' minutes',
   'start': {
-    'dateTime': date + 'T12:00:00-07:00',
+    'dateTime': startTime,
     'timeZone': 'America/Chicago'
   },
   'end': {
-    'dateTime': date + 'T12:' + howLong + ':00-07:00',
+    'dateTime': endTime,
     'timeZone': 'America/Chicago'
   },
 };
@@ -392,7 +422,7 @@ function pageStart(){
     //dummy display times reserved
 
     const res =  document.getElementById('resOpen');
-    res.insertAdjacentHTML('beforeend','<p>CLICK HERE FOR ADMIN ACCESS</p>');
+    res.insertAdjacentHTML('beforeend','<p></p>');
     res.insertAdjacentHTML('beforeend','<h1>Current Reservations</h1><br><label id="reserve"></label>');
     res.insertAdjacentHTML('beforeend','<div id="timeReservation">No time currently reserved</div><br>');
 
@@ -426,6 +456,38 @@ function updateDate(val){
     //need to create loop but this adds a selection of 7:00pm to the selector
     time.insertAdjacentHTML('beforeend', '<option value="7:00 pm" onclick="updateTime(value)">7:00 pm</option>')
 }
+function createOpenSwimTime() {
+    var date = document.getElementById('openSwimTimeDate').value
+    var startTime = document.getElementById('openSwimTimeStart').value
+    var endTime = document.getElementById('openSwimTimeEnd').value
+    console.log(date + " " + startTime + " " + endTime)
+    var realStartTime = date + "T" + startTime + ":00-06:00"
+    var realEndTime = date + "T" + endTime + ":00-06:00"
+
+             var event = {
+  'summary': "Open Swim Time",
+  'start': {
+    'dateTime': realStartTime,
+    'timeZone': 'America/Chicago'
+  },
+  'end': {
+    'dateTime': realEndTime,
+    'timeZone': 'America/Chicago'
+  },
+  'recurrence': [
+    'RRULE:FREQ=WEEKLY',
+  ],
+};
+
+var request = gapi.client.calendar.events.insert({
+  'calendarId': 'primary',
+  'resource': event
+});
+request.execute(function(event) {
+
+});
+            }
+
 function changeDisplay()
 {
     console.log("ChangeDisplay")
@@ -441,10 +503,10 @@ function changeDisplay()
         resOpen.hidden = true
         dateTime.hidden = true
         res.insertAdjacentHTML('beforeend', '<ul id="dateTime"><label>Add open Swim times to Pool: </label></div><br>' +
-                                            '<input type="date" id="start" name="trip-start">'  +
-                                            '<input type="time" id="appt" name="appt" min="09:00" max="18:00" required>' +
-                                            '<input type="time" id="appt" name="appt" min="09:00" max="18:00" required>' +
-                                            '<input type="button" value="Submit"> </ul>');
+                                            '<input type="date" id="openSwimTimeDate" required>'  +
+                                            '<input type="time" id="openSwimTimeStart" required>' +
+                                            '<input type="time" id="openSwimTimeEnd" required>' +
+                                            '<input type="button" value="Submit" onclick=createOpenSwimTime()> </ul>');
         document.getElementById('time').hidden = true
         pool.insertAdjacentHTML('beforeend', '<iframe class="column" src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FChicago&showTitle=0&src=cG9vbGxhbmVzY2hlZHVsZXJAZ21haWwuY29t&color=%23039BE5" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>');
     }
